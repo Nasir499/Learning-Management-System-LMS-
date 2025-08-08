@@ -6,7 +6,8 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import userRoute from "./routes/user.routes.js"
 import errorMiddleware   from "./middlewares/error.middleware.js";
-import courseRoute from "./routes/course.route.js"
+import courseRoute from "./routes/course.routes.js"
+import paymentRoute from "./routes/payment.routes.js"
 const app = express();
 
 app.use(express.json())
@@ -24,6 +25,7 @@ app.use(morgan("dev"))
 //Routes
 app.use('/api/v1/user',userRoute)
 app.use('/api/v1/course',courseRoute)
+app.use('/api/v1/payments',paymentRoute)
 
 
 
