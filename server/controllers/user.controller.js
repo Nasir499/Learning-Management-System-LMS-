@@ -4,6 +4,7 @@ import cloudinary from "cloudinary"
 import fs from "fs"
 import crypto from "crypto"
 import sendEmail from "../utils/sendEmail.js";
+import bcrypt from "bcrypt"
 
 const cookieOptions = {
   maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -83,7 +84,7 @@ const register = async (req, res, next) => {
 
 }
 
-const login = async (req, res) => {
+const login = async (req, res,next) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -116,7 +117,7 @@ const login = async (req, res) => {
 }
 
 
-const logout = (req, res) => {
+const logout = (req, res,next) => {
   try {
     res.cookie('token', null, {
       secure: true,
@@ -132,7 +133,7 @@ const logout = (req, res) => {
   }
 }
 
-const getProfile = async (req, res) => {
+const getProfile = async (req, res,next) => {
   try {
     const userId = req.user.id;
     const user = await User.findById(userId)
@@ -218,7 +219,7 @@ const resetPassword = async (req, res, next) => {
 
 }
 
-const changePassword = async (req, res) => {
+const changePassword = async (req, res,next) => {
   const { oldPassword, newPassword } = req.body;
   const { id } = req.user;
 
@@ -252,7 +253,7 @@ const changePassword = async (req, res) => {
 
 
 }
-const updateUser = async (req, res) => {
+const updateUser = async (req, res,next) => {
   const { fullName } = req.body;
   const { id } = req.user.id;
 
