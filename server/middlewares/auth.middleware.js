@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import AppError from "../utils/error.util.js";
 
 const isLoggedIn = async (req, res, next) => {
+    // const token = req.headers.authorization?.starstswith('Bearer') ? req.headers.authorization.split(' ')[1] : req.cookies.token;
     const { token } = req.cookies;
 
     if (!token) {
