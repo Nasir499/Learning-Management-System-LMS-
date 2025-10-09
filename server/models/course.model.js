@@ -4,14 +4,14 @@ const courseSchema = new Schema({
     title: {
         type: String,
         required:[true,"Title is required"],
-        minLength:[8,"Title must be at least 8 characters long"],
+        minLength:[3,"Title must be at least 8 characters long"],
         maxLength:[100,"Title must not exceed 100 characters"],
         trim: true
     },
     description: {
         type: String,
         required: [true, "Description is required"],
-        minLength: [20, "Description must be at least 20 characters long"],
+        minLength: [10, "Description must be at least 20 characters long"],
         maxLength: [500, "Description must not exceed 500 characters"],
         trim: true
     },

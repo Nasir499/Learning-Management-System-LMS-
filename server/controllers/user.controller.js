@@ -36,7 +36,7 @@ const register = async (req, res, next) => {
       return new AppError("User registration failes, please try again", 400)
     }
     //todo file upload
-    console.log("file details", req.file);
+    // console.log("file details", req.file);
 
     if (req.file) {
 
@@ -115,7 +115,6 @@ const login = async (req, res,next) => {
     return next(new AppError(error.message, 500))
   }
 }
-
 
 const logout = (req, res,next) => {
   try {
@@ -253,9 +252,10 @@ const changePassword = async (req, res,next) => {
 
 
 }
+
 const updateUser = async (req, res,next) => {
   const { fullName } = req.body;
-  const { id } = req.user.id;
+  const { id } = req.params;
 
   const user = await User.findById(id)
 
@@ -263,7 +263,7 @@ const updateUser = async (req, res,next) => {
     return next(new AppError("User does not exist", 400))
   }
 
-  if(req.fullName){
+  if(req.body.fullName){
     user.fullName = fullName
   }
 

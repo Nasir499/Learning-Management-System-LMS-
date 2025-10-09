@@ -7,7 +7,6 @@ router.route('/razorpay-key')
     .get(
         isLoggedIn,
         getRazorpayKey
-
     )
 
 router.route('/subscribe')

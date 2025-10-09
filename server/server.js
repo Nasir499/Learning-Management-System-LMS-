@@ -18,6 +18,6 @@ const PORT = process.env.PORT || 8080;
 
 app.listen(PORT,async()=>{
     await connectionToDb();
-    console.log(`Server is listening on port http://localhost:${PORT}`);
+    console.log(`Server is listening on port: http://localhost:${PORT}`);
 })
 
