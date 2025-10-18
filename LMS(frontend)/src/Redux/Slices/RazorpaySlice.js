@@ -14,7 +14,7 @@ const initialState = {
 
 export const getRazorPayId = createAsyncThunk("/razorpay/getId",async()=>{
     try {
-        const response = await axiosInstance.get("http://localhost:8000/api/v1/payments/razorpay-key");
+        const response = await axiosInstance.get("payments/razorpay-key");
         return response.data;
     } catch (error) {
         toast.error("Failed to get Razorpay API key")
@@ -22,15 +22,16 @@ export const getRazorPayId = createAsyncThunk("/razorpay/getId",async()=>{
 })
 export const purchaseCourseBundle = createAsyncThunk("/purchase",async()=>{
     try {
-        const response = await axiosInstance.post("http://localhost:8000/api/v1/payments/subscribe");
-        return response;
+        const response = await axiosInstance.post("payments/subscribe");
+        console.log(response);
+        return response.data;
     } catch (error) {
         toast.error(error?.response?.message || "Failed to subscribe course bundle")
     }
 })
-export const verifyUserPayment = createAsyncThunk("/payments/verify",async()=>{
+export const verifyUserPayment = createAsyncThunk("/payments/verify",async(data)=>{
     try {
-        const response = await axiosInstance.post("http://localhost:8000/api/v1/payments/verify",{
+        const response = await axiosInstance.post("payments/verify",{
         razorpay_payment_id : data.razorpay_payment_id,
         razorpay_subscription_id : data.razorpay_order_id,
         razorpay_signature :data.razorpay_signature,
@@ -42,7 +43,7 @@ export const verifyUserPayment = createAsyncThunk("/payments/verify",async()=>{
 })
 export const getPaymentRecords = createAsyncThunk("/payments/records",async()=>{
     try {
-        const response =  axiosInstance.get("http://localhost:8000/api/v1/payments?.count=100");
+        const response =  axiosInstance.get("payments?.count=100");
         toast.promise(response, {
             loading: "Getting Payment records...",
             success:(data) => {
@@ -57,7 +58,7 @@ export const getPaymentRecords = createAsyncThunk("/payments/records",async()=>{
 })
 export const cancelCourseBundle = createAsyncThunk("/payments/cancel",async()=>{
     try {
-        const response =  axiosInstance.post("http://localhost:8000/api/v1/payments/unsubscribe");
+        const response =  axiosInstance.post("payments/unsubscribe");
         toast.promise(response, {
             loading: "Cancelling subscription...",
             success:(data) => {

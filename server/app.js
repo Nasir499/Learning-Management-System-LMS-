@@ -27,8 +27,11 @@ app.use('/api/v1/user',userRoute)
 app.use('/api/v1/course',courseRoute)
 app.use('/api/v1/payments',paymentRoute)
 
-// app.all('*',(req,res,next)=>{
-//     res.status(404).send("Oops!! 404 Page not found");
+// app.all('*', (req, res, next) => {
+//     res.status(404).json({
+//         success:false,
+//         message:"Oops!! 404 Page not found"
+//     })
 //     next()
 // })
 

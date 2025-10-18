@@ -10,7 +10,7 @@ const initialState = {
 
 export const createAccount = createAsyncThunk("/auth/signup",async(data)=>{
     try {
-        const res = axiosInstance.post("http://localhost:8000/api/v1/user/register",data)
+        const res = axiosInstance.post("user/register",data)
         toast.promise(res,{
             loading:"Wait! creating your account",
             success:(data)=>{
@@ -29,7 +29,7 @@ export const createAccount = createAsyncThunk("/auth/signup",async(data)=>{
 
 export const login = createAsyncThunk("/auth/login",async(data)=>{
     try {
-        const res = axiosInstance.post("http://localhost:8000/api/v1/user/login",data)
+        const res = axiosInstance.post("user/login",data)
         toast.promise(res,{
             loading:"Wait! authentication in progress",
             success:(data)=>{
@@ -48,7 +48,7 @@ export const login = createAsyncThunk("/auth/login",async(data)=>{
 
 export const logout = createAsyncThunk("/auth/logout",async()=>{
    try {
-     const res = axiosInstance.get("http://localhost:8000/api/v1/user/logout")
+     const res = axiosInstance.get("user/logout")
         toast.promise(res,{
             loading:"Wait! logout in progress",
             success:(data)=>{
@@ -62,7 +62,7 @@ export const logout = createAsyncThunk("/auth/logout",async()=>{
 })
 export const updateProfile = createAsyncThunk("/user/update",async(data)=>{
    try {
-     const res = axiosInstance.put(`http://localhost:8000/api/v1/user/update/${data[0]}`,data[1])
+     const res = axiosInstance.put(`user/update/${data[0]}`,data[1])
         toast.promise(res,{
             loading:"Wait! Profile update in progress",
             success:(data)=>{
@@ -76,7 +76,7 @@ export const updateProfile = createAsyncThunk("/user/update",async(data)=>{
 })
 export const getProfile = createAsyncThunk("/user/details",async()=>{
    try {
-     const res = await axiosInstance.get(`http://localhost:8000/api/v1/user/me`)
+     const res = await axiosInstance.get(`user/me`)
      return res.data
    } catch (error) {
     toast.error(error.message)

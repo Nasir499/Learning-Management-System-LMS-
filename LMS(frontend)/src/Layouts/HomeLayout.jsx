@@ -10,9 +10,9 @@ function HomeLayout({ children }) {
   const dispatch = useDispatch()
   const navigate = useNavigate();
 
-  const isLoggedIn = useSelector((state)=> state?.auth?.isLoggedIn)
+  const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn)
 
-  const role = useSelector((state)=>state?.auth?.role)
+  const role = useSelector((state) => state?.auth?.role)
 
 
   function changeWidth() {
@@ -32,7 +32,7 @@ function HomeLayout({ children }) {
     event.preventDefault();
 
     const res = await dispatch(logout());
-    if(res?.payload?.success) navigate('/')
+    if (res?.payload?.success) navigate('/')
   }
 
   return (
@@ -62,14 +62,14 @@ function HomeLayout({ children }) {
             <li>
               <Link to="/"> Home </Link>
             </li>
-            {isLoggedIn && role === "ADMIN" &&(
+            {isLoggedIn && role === "ADMIN" && (
               <li>
                 <Link to="/admin/dashboard">
                   Admin Dashboard
                 </Link>
               </li>
             )}
-            {isLoggedIn && role === "ADMIN" &&(
+            {isLoggedIn && role === "ADMIN" && (
               <li>
                 <Link to="/course/create">
                   Create Course
@@ -87,34 +87,34 @@ function HomeLayout({ children }) {
             </li>
             {!isLoggedIn && (
               <li className="absolute bottom-4 w-[90%] list-none">
-              <div className="w-full flex items-center justify-center">
-                <button className="btn-primary bg-amber-50 text-black px-4 py-1 font-semibold rounded-md w-full hover:bg-amber-800">
-                  <Link to="/login">
-                  Login
-                  </Link>
+                <div className="w-full flex items-center justify-center">
+                  <button className="btn-primary bg-amber-50 text-black px-4 py-1 font-semibold rounded-md w-full hover:bg-amber-800">
+                    <Link to="/login">
+                      Login
+                    </Link>
                   </button>
-                <button className="btn-secondary bg-amber-200 text-black ml-1.5 px-4 py-1 font-semibold rounded-md w-full hover:bg-amber-600">
-                  <Link to="/signup">
-                  SignUp
-                  </Link>
-                </button>
-              </div>
+                  <button className="btn-secondary bg-amber-200 text-black ml-1.5 px-4 py-1 font-semibold rounded-md w-full hover:bg-amber-600">
+                    <Link to="/signup">
+                      SignUp
+                    </Link>
+                  </button>
+                </div>
               </li>
             )}
             {isLoggedIn && (
               <li className="absolute bottom-4 w-[90%] list-none">
-              <div className="w-full flex items-center justify-center">
-                <button className="btn-primary bg-amber-50 text-black px-4 py-1 font-semibold rounded-md w-full hover:bg-amber-800">
-                  <Link to="/user/profile">
-                  Profile
-                  </Link>
+                <div className="w-full flex items-center justify-center">
+                  <button className="btn-primary bg-amber-50 text-black px-4 py-1 font-semibold rounded-md w-full hover:bg-amber-800">
+                    <Link to="/user/profile">
+                      Profile
+                    </Link>
                   </button>
-                <button className="btn-secondary bg-amber-200 text-black ml-1.5 px-4 py-1 font-semibold rounded-md w-full hover:bg-amber-600">
-                  <Link onClick={handleLogout}>
-                  Logout
-                  </Link>
-                </button>
-              </div>
+                  <button className="btn-secondary bg-amber-200 text-black ml-1.5 px-4 py-1 font-semibold rounded-md w-full hover:bg-amber-600">
+                    <Link onClick={handleLogout}>
+                      Logout
+                    </Link>
+                  </button>
+                </div>
               </li>
             )}
 

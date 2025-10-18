@@ -25,8 +25,10 @@ const buySubscribtion = async (req, res, next) => {
             return next(new AppError("Admins are not allowed to buy subscriptions", 401));
         }
         const subscription = await razorpay.subscriptions.create({
-            plan_id: process.env.RAZORPAY_PLAN_ID,
             customer_notify: 1,
+            total_count:12,
+            plan_id: process.env.RAZORPAY_PLAN_ID,
+            
         })
         user.subscription.id = subscription.id;
         user.subscription.status = subscription.status;
@@ -37,7 +39,7 @@ const buySubscribtion = async (req, res, next) => {
             subscription_id: subscription.id
         });
     } catch (error) {
-        return new AppError("Ho66e na", 400)
+        next(new AppError("Ho66e na", 500));
     }
 
 }

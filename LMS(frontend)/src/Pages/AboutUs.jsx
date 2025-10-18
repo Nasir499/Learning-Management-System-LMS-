@@ -17,7 +17,7 @@ function AboutUs() {
                                 <p className='text-xl text-gray-200'>
                                     Our goal is to provide Affordable and Quality Education to the world.
                                     we are providing platform to the aspiring teachers and students to share
-                                    their skills,creativity and knowledge to each other to empower and coontribute
+                                    their skills,creativity and knowledge to each other to empower and contribute
                                     in the growth and wellness of mankind.
                                 </p>
                             </section>
