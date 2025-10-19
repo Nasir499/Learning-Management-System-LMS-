@@ -13,7 +13,7 @@ function CheckOut() {
   const razorPayKey = useSelector((state) => state?.razorpay?.key);
   // console.log(razorPayKey);
   const subscription_id = useSelector((state) => state?.razorpay?.subscription_id);
-  console.log(subscription_id);
+  // console.log(subscription_id);
 
   const isPaymentVerified = useSelector((state) => state?.razorpay?.isPaymentVerified);
   const userData = useSelector((state) => state?.auth?.data);
@@ -39,22 +39,30 @@ function CheckOut() {
         paymentDetails.razorpay_payment_id = response.razorpay_payment_id;
         paymentDetails.razorpay_signature = response.razorpay_signature;
         paymentDetails.razorpay_subscription_id = response.razorpay_subscription_id;
-
+        console.log(paymentDetails);
+        
         toast.success("Payment successfull")
 
-        await dispatch(verifyUserPayment(paymentDetails))
-        isPaymentVerified ? navigate("/checkout/success") : navigate("/checkout/fail")
+        const res = await dispatch(verifyUserPayment(paymentDetails))
+        console.log(res.payload);
+        
+        (res?.payload?.success) ? navigate("/checkout/success") : navigate("/checkout/fail")
       },
       theme: {
         color: "#f37254"
       },
       prefill: {
-        email: userData.email,
-        name: userData.fullName
+        email: userData.email || "",
+        name: userData.fullName || ""
       },
     }
+    if (window.Razorpay) {
     const paymentObject = new window.Razorpay(options)
     paymentObject.open()
+    }
+    else{
+      toast.error("Razorpay SDK failed to load")
+    }
 
   }
 

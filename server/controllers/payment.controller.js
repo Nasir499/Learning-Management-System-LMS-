@@ -2,6 +2,8 @@ import { razorpay } from '../server.js';
 import User from '../models/user.model.js'
 import AppError from '../utils/error.util.js';
 import Payment from '../models/payment.model.js';
+import crypto from 'crypto';
+import { log } from 'console';
 
 
 
@@ -47,6 +49,12 @@ const buySubscribtion = async (req, res, next) => {
 const verifySubscription = async (req, res, next) => {
     const { id } = req.user;
     const { razorpay_payment_id, razorpay_payment_signature, razorpay_subscription_id } = req.body;
+    // console.log(razorpay_subscription_id);
+    
+    if(!razorpay_payment_id || !razorpay_payment_signature || !razorpay_subscription_id){
+        return next(new AppError("Payment details are missing", 500));
+    }
+    
     const user = await User.findById(id);
 
     if (!user) {
@@ -54,14 +62,19 @@ const verifySubscription = async (req, res, next) => {
     }
 
     const subscriptionId = user.subscription.id;
+    // console.log(subscriptionId);
+    
 
-    const generatedSignature = crypto.createHmac('sha256', process.env.RAZORPAY_SECRET)
-        .update(`${razorpay_payment_id}|${subscriptionId}`)
+    const generatedSignature = crypto
+        .createHmac('sha256', process.env.RAZORPAY_SECRET)
+         .update(`${razorpay_payment_id}|${subscriptionId}`)
         .digest('hex');
 
+   
     if (generatedSignature !== razorpay_payment_signature) {
+        console.log(generatedSignature ,razorpay_payment_signature);
         return next(new AppError("Payment not verified", 500));
-    }
+   }
 
     await Payment.create({
         razorpay_payment_id,
