@@ -34,14 +34,14 @@ const courseSchema = new Schema({
         {
             title: String,
             description: String,
-            lecture: {
+            video: {
                 public_id: {
                     type: String,
                 },
                 secure_url: {
                     type: String
                 }
-            }
+            },
         },
         
     ],

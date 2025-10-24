@@ -5,7 +5,7 @@ import multer from "multer"
 
 const upload = multer({
   dest:"upload/",
-  limits:{fileSize:50*1024*1024},
+  limits:{fileSize:500*1024*1024},
   storage:multer.diskStorage({
     destination:"uploads/",
     filename:(_req,file,cb)=>{
@@ -21,7 +21,7 @@ const upload = multer({
       ext !==".png" &&
       ext !==".mp4"
      ){
-        cb(new Error(`Unsuppirted file type! ${ext}`),false)
+        cb(new Error(`Unsupported file type! ${ext}`),false)
         return
      }
      cb(null,true)

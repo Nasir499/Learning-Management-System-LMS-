@@ -1,8 +1,10 @@
 import { useDispatch, useSelector } from "react-redux"
 import HomeLayout from "../../Layouts/HomeLayout";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
 import { getProfile } from "../../Redux/Slices/AuthSlice";
+import { cancelCourseBundle } from "../../Redux/Slices/RazorpaySlice";
+import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 function Profile() {
   const dispatch = useDispatch();
@@ -11,6 +13,12 @@ function Profile() {
    useEffect(() => {
        dispatch(getProfile());
    }, [dispatch]);
+
+   async function handleCancelation() {
+        await dispatch(cancelCourseBundle())
+        await dispatch(getProfile())
+        toast.success("Course bundle cancelled successfully")
+   }
 
   return (
     <HomeLayout>
@@ -37,7 +45,7 @@ function Profile() {
                         </Link>
                     </div>
                     {userData?.subscription?.status === 'active' && (
-                        <button className="w-full bg-red-600 mt-2 py-2 hover:bg-red-500 transition-all ease-in-out duration-300 rounded-sm font-semibold cursor-pointer text-center">
+                        <button onClick={handleCancelation} className="w-full bg-red-600 mt-2 py-2 hover:bg-red-500 transition-all ease-in-out duration-300 rounded-sm font-semibold cursor-pointer text-center">
                             Cancel Subscription
                         </button>
                     )}

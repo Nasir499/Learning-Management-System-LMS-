@@ -82,6 +82,8 @@ const verifySubscription = async (req, res, next) => {
         razorpay_signature: razorpay_payment_signature,
     });
     user.subscription.status = 'active';
+    console.log(user.subscription.status);
+    
     await user.save();
 
     res.status(200).json({

@@ -23,9 +23,11 @@ const authorizedRoles = (...roles)=>async (req, res, next) => {
 
 }
 const authorizedSubscriber = async (req, res, next) => {
+  console.log("authorizedSubscriber",req.user);
+  
    const subscription = req.user.subscription;
    const currUser = req.user.role;
-   if(currUser !=='ADMIN' && subscription.status !== 'active'){
+   if(currUser !=='ADMIN' && subscription.status !== 'created'){
        return next(new AppError("Unauthorized, You don't have permission to access this resource", 403));
    }
    next();
