@@ -7,17 +7,15 @@ import { deleteCourseLectures, getCourseLectures } from '../../Redux/Slices/Lect
 function Displaylectures() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {state} = useLocation();
-  
- const { lectures } = useSelector((state) => state?.lectures);
-  
+  const {state} = useLocation(); 
+  const { lectures } = useSelector((state) => state?.lectures);
   const { role } = useSelector((state) => state.auth);
   const [currentVideo, setCurrentVideo] = useState(0);
 
 
-  function onLectureDelete(courseId, lectureId) {
-    dispatch(deleteCourseLectures({ courseId: courseId, lectureId: lectureId }));
-    dispatch(getCourseLectures(courseId));
+  async function onLectureDelete(courseId, lectureId) {
+   await dispatch(deleteCourseLectures({ courseId: courseId, lectureId: lectureId }));
+   await dispatch(getCourseLectures(courseId));
   }
 
 
@@ -29,12 +27,14 @@ function Displaylectures() {
 
   return (
     <HomeLayout>
-      <div className='flex flex-col gap-10 justify-center min-h-full py-10 text-white mx-'>
+      <div className='flex flex-col min-h-[90vh] gap-10 justify-center  py-10 text-white mx-[5%]'>
+
         <div className='text-center text-2xl font-semibold text-yellow-500'>
           CourseName : {state?.title}
         </div>
 
-        <div className='flex justify-center gap-10 w-full'>
+        {(lectures && lectures.length > 0) ?
+        (<div className='flex justify-center gap-10 w-full'>
           {/* Left section for playing video */}
           <div className='w-2/3 flex ml-20 flex-col gap-5 shadow-[0_0_10px_black]'>
               <video
@@ -68,7 +68,7 @@ function Displaylectures() {
             <li className='font-semibold text-xl text-yellow-500 flex items-center justify-between'>
               <p>Lecture Lists</p>
               {role === "ADMIN" && (
-                <button onClick={()=>navigate(`/course/addlecture`,{state:{...state}})} className='w-[10rem] bg-green-500 text-black  hover:bg-green-600 duration-300 bottom-0  px-0.5 py-1 rounded-md font-semibold text-sm cursor-pointer'>
+                <button onClick={()=>navigate(`/course/addlecture`,{state:{...state}})} className='w-[10rem] bg-green-500 text-black  hover:bg-green-600 duration-300 bottom-0  px-0.5 py-1 rounded-md font-semibold text-sm cursor-pointer  btn-primary'>
                   Add New Lecture
                 </button>
               )}
@@ -83,22 +83,27 @@ function Displaylectures() {
                       <span className='text-pink-500'>{" "} Lecture {idx + 1} : {" "}</span>
                     {lecture.title}
                     </span>
-                  </p>
                   {role === "ADMIN" && (
-                    <button onClick={()=>onLectureDelete(state._id, lecture._id)} className='w-[8rem] bg-red-200 text-black font-semibold py-1 rounded-lg hover:bg-red-400 duration-300 bottom-0 cursor-pointer'>
+                    <button onClick={()=>onLectureDelete(state._id, lecture._id)} className='w-[8rem] bg-red-200 text-black font-semibold py-1 rounded-lg hover:bg-red-400 duration-300 bottom-0 cursor-pointer ml-1 inline'>
                       Delete Lecture
                     </button>
                   )}
+                  </p>
                 </li>
                 )
               }
               )
             }
           </ul>
-        </div>
+        </div>):( role === "ADMIN") && (
+                <button onClick={()=>navigate(`/course/addlecture`,{state:{...state}})} className=' bg-green-500 text-black flex flex-col items-center justify-center  hover:bg-green-600 duration-300 bottom-0  px-0.5 py-1 rounded-md font-semibold text-sm cursor-pointer  btn-primary'>
+                  Add New Lecture
+                </button>
+              )}
+
       </div>
     </HomeLayout>
   )
 }
 
-export default Displaylectures
+export default Displaylectures;
