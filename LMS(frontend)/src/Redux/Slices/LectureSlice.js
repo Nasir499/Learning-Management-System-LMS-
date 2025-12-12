@@ -6,6 +6,7 @@ const initialState = {
     lectures: []
 }
 
+
 export const getCourseLectures = createAsyncThunk("/course/lecture/get", async (cid) => {
     try {
         const response = axiosInstance.get(`/course/${cid}`);
@@ -25,7 +26,7 @@ export const addCourseLectures = createAsyncThunk("/course/lecture/add", async (
         formData.append("lecture", data.lecture);
         formData.append("title", data.title);
         formData.append("description", data.description);
-        const response = axiosInstance.post(`/course/${data.id}`);
+        const response = axiosInstance.post(`/course/${data.id}`,formData);
         toast.promise(response, {
             loading: "Adding Lectures...",
             success: "Lectures Added successfully",
@@ -62,11 +63,12 @@ const lectureSlice = createSlice({
                 state.lectures = action?.payload?.lectures
             })
             .addCase(addCourseLectures.fulfilled, (state, action) => {
-                state.lectures = action?.payload?.lectures
+                state.lectures = action?.payload?.course?.lectures
             })
             .addCase(deleteCourseLectures.fulfilled, (state, action) => {
                 state.lectures = action?.payload?.course?.lectures
             });
     }
 })
+
 export default lectureSlice.reducer;

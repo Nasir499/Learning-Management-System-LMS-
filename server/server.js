@@ -20,4 +20,3 @@ app.listen(PORT,async()=>{
     await connectionToDb();
     console.log(`Server is listening on port: http://localhost:${PORT}`);
 })
-

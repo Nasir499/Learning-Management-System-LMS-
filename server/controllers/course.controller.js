@@ -101,7 +101,7 @@ const createCourse = async (req, res, next) => {
     });
 }
 
-const updateCourse = async (req, res, next) => {
+const updateCourseById = async (req, res, next) => {
     // Implementation for updating a course
     // This function is not defined in the provided code snippet
     // You can add your logic here
@@ -130,6 +130,7 @@ const updateCourse = async (req, res, next) => {
         return next(new AppError("Failed to update course", 500));
     }
 }
+
 const removeCourse = async (req, res, next) => {
     // Implementation for removing a course
     // This function is not defined in the provided code snippet
@@ -152,6 +153,7 @@ const removeCourse = async (req, res, next) => {
         return next(new AppError("Failed to remove course", 500));
     }
 }
+
 const createLectureToCourseById = async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -179,6 +181,7 @@ const createLectureToCourseById = async (req, res, next) => {
             try {
                 const result = await cloudinary.v2.uploader.upload(req.file.path, {
                     folder: "lectures",
+                    chunk_size: 5000000000,
                     resource_type: "video"
                 });
                 if (result) {
@@ -209,6 +212,78 @@ const createLectureToCourseById = async (req, res, next) => {
         return next(new AppError("Failed to add lecture", 500));
     }
 }
+
+ const addLectureToCourseById = async (req, res, next) => {
+  const { title, description } = req.body;
+  const { id } = req.params;
+
+  let lectureData = {};
+
+  if (!title || !description) {
+    return next(new AppError('Title and Description are required', 400));
+  }
+
+  const course = await Course.findById(id);
+
+  if (!course) {
+    return next(new AppError('Invalid course id or course not found.', 400));
+  }
+
+  // Run only if user sends a file
+  if (req.file) {
+    try {
+      const result = await cloudinary.v2.uploader.upload(req.file.path, {
+        folder: 'lms', // Save files in a folder named lms
+        chunk_size: 5000000000, // 5 gb size
+        resource_type: 'video',
+        width: 1280,
+        height: 720,
+        crop: 'scale',
+      });
+
+      // If success
+      if (result) {
+        // Set the public_id and secure_url in array
+        lectureData.public_id = result.public_id;
+        lectureData.secure_url = result.secure_url;
+      }
+
+      // After successful upload remove the file from local storage
+      fs.rm(`uploads/${req.file.filename}`);
+    } catch (error) {
+      // Empty the uploads directory without deleting the uploads directory
+      for (const file of await fs.readdir('uploads/')) {
+        await fs.unlink(path.join('uploads/', file));
+      }
+
+      // Send the error message
+      return next(
+        new AppError(
+          JSON.stringify(error) || 'File not uploaded, please try again',
+          400
+        )
+      );
+    }
+  }
+
+  course.lectures.push({
+    title,
+    description,
+    lecture: lectureData,
+  });
+
+  course.numberOfLectures = course.lectures.length;
+
+  // Save the course object
+  await course.save();
+
+  res.status(200).json({
+    success: true,
+    message: 'Course lecture added successfully',
+    course,
+  });
+}
+
  const removeLectureFromCourse = async (req, res, next) => {
   // Grabbing the courseId and lectureId from req.query
   const { courseId, lectureId } = req.query;
@@ -265,11 +340,12 @@ const createLectureToCourseById = async (req, res, next) => {
     message: 'Course lecture removed successfully',
   });
 };
+
 export {
     getAllCourses,
     getLecturesCourseById,
     createCourse,
-    updateCourse,
+    updateCourseById,
     removeCourse,
     createLectureToCourseById,
     removeLectureFromCourse

@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom"
 
 function CourseCard({ data }) {
   const navigate = useNavigate()
+  
+  
   return (
     <div
       onClick={() => navigate('/course/description', { state: { ...data } })}

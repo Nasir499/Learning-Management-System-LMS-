@@ -9,10 +9,8 @@ const store = configureStore({
     auth:authSliceReducer,
     course:courseSliceReducer,
     razorpay:razorpaySliceReducer,
-    lectures:lectureSliceReducer
+    lectures:lectureSliceReducer,
   },
   devTools:true
 });
-
-
 export default store;

@@ -8,15 +8,15 @@ const initialState = {
 }
 
 
-export const createAccount = createAsyncThunk("/auth/signup",async(data)=>{
+export const createAccount = createAsyncThunk("/auth/signup", async (data) => {
     try {
-        const res = axiosInstance.post("user/register",data)
-        toast.promise(res,{
-            loading:"Wait! creating your account",
-            success:(data)=>{
+        const res = axiosInstance.post("user/register", data)
+        toast.promise(res, {
+            loading: "Wait! creating your account",
+            success: (data) => {
                 return data?.data?.message
             },
-            error:"Failed to create account"
+            error: "Failed to create account"
         })
 
         return (await res).data
@@ -27,15 +27,15 @@ export const createAccount = createAsyncThunk("/auth/signup",async(data)=>{
     }
 })
 
-export const login = createAsyncThunk("/auth/login",async(data)=>{
+export const login = createAsyncThunk("/auth/login", async (data) => {
     try {
-        const res = axiosInstance.post("user/login",data)
-        toast.promise(res,{
-            loading:"Wait! authentication in progress",
-            success:(data)=>{
+        const res = axiosInstance.post("user/login", data)
+        toast.promise(res, {
+            loading: "Wait! authentication in progress",
+            success: (data) => {
                 return data?.data?.message
             },
-            error:"Failed to login"
+            error: "Failed to login"
         })
 
         return (await res).data
@@ -46,71 +46,72 @@ export const login = createAsyncThunk("/auth/login",async(data)=>{
     }
 })
 
-export const logout = createAsyncThunk("/auth/logout",async()=>{
-   try {
-     const res = axiosInstance.get("user/logout")
-        toast.promise(res,{
-            loading:"Wait! logout in progress",
-            success:(data)=>{
+export const logout = createAsyncThunk("/auth/logout", async () => {
+    try {
+        const res = axiosInstance.get("user/logout")
+        toast.promise(res, {
+            loading: "Wait! logout in progress",
+            success: (data) => {
                 return data?.data?.message
             },
-            error:"Failed to logout"
+            error: "Failed to logout"
         })
-   } catch (error) {
-    toast.error(error?.response?.data?.message)
-   }
+    } catch (error) {
+        toast.error(error?.response?.data?.message)
+    }
 })
-export const updateProfile = createAsyncThunk("/user/update",async(data)=>{
-   try {
-     const res = axiosInstance.put(`user/update/${data[0]}`,data[1])
-        toast.promise(res,{
-            loading:"Wait! Profile update in progress",
-            success:(data)=>{
+export const updateProfile = createAsyncThunk("/user/update", async (data) => {
+    try {
+        const res = axiosInstance.put(`user/update/${data[0]}`, data[1])
+        toast.promise(res, {
+            loading: "Wait! Profile update in progress",
+            success: (data) => {
                 return data?.message
             },
-            error:"Failed to Update Profile"
+            error: "Failed to Update Profile"
         })
-   } catch (error) {
-    toast.error(error?.response?.data?.message)
-   }
+    } catch (error) {
+        toast.error(error?.response?.data?.message)
+    }
 })
-export const getProfile = createAsyncThunk("/user/details",async()=>{
-   try {
-     const res = await axiosInstance.get(`user/me`)
-     return res.data
-   } catch (error) {
-    toast.error(error.message)
-   }
+export const getProfile = createAsyncThunk("/user/details", async () => {
+    try {
+        const res = await axiosInstance.get(`user/me`)
+        return res.data
+    } catch (error) {
+        toast.error(error.message)
+    }
 })
 
 const authSlice = createSlice({
-    name:'auth',
+    name: 'auth',
     initialState,
-    reducers:{},
-    extraReducers:(builder)=>{
-        builder.addCase(login.fulfilled,(state,action)=>{
-            localStorage.setItem('data',JSON.stringify(action?.payload?.user))
-            localStorage.setItem('isLoggedIn',true)
-            localStorage.setItem('role',action?.payload?.user?.role)
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+        .addCase(login.fulfilled, (state, action) => {
+            localStorage.setItem('data', JSON.stringify(action?.payload?.user))
+            localStorage.setItem('isLoggedIn', true)
+            localStorage.setItem('role', action?.payload?.user?.role)
             state.isLoggedIn = true,
-            state.data = action?.payload?.user,
-            state.role = action?.payload?.user?.role
+                state.data = action?.payload?.user,
+                state.role = action?.payload?.user?.role
         })
-        .addCase(logout.fulfilled,(state,action)=>{
-            localStorage.clear()
-            state.data = {}
-            state.isLoggedIn = false
-            state.role = ""
-        })
-        .addCase(getProfile.fulfilled,(state,action)=>{
-            // if(action?.payload?.user) return
-            localStorage.setItem('data',JSON.stringify(action?.payload?.user))
-            localStorage.setItem('isLoggedIn',true)
-            localStorage.setItem('role',action?.payload?.user?.role)
-            state.isLoggedIn = true,
-            state.data = action?.payload?.user,
-            state.role = action?.payload?.user?.role
-        })
+        .addCase(logout.fulfilled, (state, action) => {
+                localStorage.clear()
+                state.data = {}
+                state.isLoggedIn = false
+                state.role = ""
+            })
+        .addCase(getProfile.fulfilled, (state, action) => {
+                // if(action?.payload?.user) return
+                localStorage.setItem('data', JSON.stringify(action?.payload?.user))
+                localStorage.setItem('isLoggedIn', true)
+                localStorage.setItem('role', action?.payload?.user?.role)
+                state.isLoggedIn = true,
+                    state.data = action?.payload?.user,
+                    state.role = action?.payload?.user?.role
+            })
     }
 })
 
