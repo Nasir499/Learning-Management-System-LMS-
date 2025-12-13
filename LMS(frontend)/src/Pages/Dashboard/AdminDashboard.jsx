@@ -96,7 +96,7 @@ function AdminDashboard() {
 			await dispatch(getStatData());
 			await dispatch(getPaymentRecords());
 		})();
-	}, [myCourses]);
+	}, []);
 
 	return (
 		<HomeLayout>

@@ -65,9 +65,7 @@ const lectureSlice = createSlice({
             .addCase(addCourseLectures.fulfilled, (state, action) => {
                 state.lectures = action?.payload?.course?.lectures
             })
-            .addCase(deleteCourseLectures.fulfilled, (state, action) => {
-                state.lectures = action?.payload?.course?.lectures
-            });
+           
     }
 })
 

@@ -6,7 +6,6 @@ function CourseDescription() {
     const navigate = useNavigate()
     const { state } = useLocation()
     const {role,data} = useSelector((state) => state.auth)
-    // console.log(state);
     
     return (
         <HomeLayout>
@@ -26,7 +25,7 @@ function CourseDescription() {
                                     <span className="text-yellow-500 font-bold">
                                         Total lectures : {" "}
                                     </span>
-                                    {state.numberoflectures}
+                                    {state?.numberoflectures}
                                 </p>
 
                                 <p className="font-semibold">
