@@ -24,7 +24,7 @@ export const getAllCourses = createAsyncThunk("/course/get", async () => {
 
 export const deleteCourse = createAsyncThunk("/course/delete", async (id) => {
     try {
-        const response = axiosInstance.delete(`http://localhost:8000/api/v1/course/${id}`);
+        const response = axiosInstance.delete(`course/${id}`);
         toast.promise(response, {
             loading: "deleting course ...",
             success: "Courses deleted successfully",
