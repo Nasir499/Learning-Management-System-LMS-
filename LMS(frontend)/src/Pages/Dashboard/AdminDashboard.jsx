@@ -17,8 +17,8 @@ import { getStatData } from "../../Redux/Slices/StatSlice";
 import { getPaymentRecords } from "../../Redux/Slices/RazorpaySlice";
 import { Bar, Pie } from "react-chartjs-2";
 import { FaUsers } from "react-icons/fa";
-import {FcSalesPerformance} from 'react-icons/fc'
-import {GiMoneyStack} from 'react-icons/gi'
+import { FcSalesPerformance } from "react-icons/fc";
+import { GiMoneyStack } from "react-icons/gi";
 import { BsCollectionPlayFill, BsTrash } from "react-icons/bs";
 
 ChartJS.register(
@@ -38,10 +38,8 @@ function AdminDashboard() {
 		(state) => state.stat
 	);
 	const { allPayments, monthlySalesRecords, finalMonth } = useSelector(
-		
 		(state) => state.razorpay
 	);
-	
 
 	const userData = {
 		labels: ["Registered Users", "Enrolled Users"],
@@ -56,12 +54,12 @@ function AdminDashboard() {
 	};
 
 	const myCourses = useSelector((state) => state?.course?.courseData);
-	
 
 	async function onCourseDelete(id) {
+		if(window.confirm("Are you sure you want to delete this course?") === false) return;
 		const res = await dispatch(deleteCourse(id));
 		if (res?.payloas?.success) {
-			 dispatch(getAllCourses());
+			await dispatch(getAllCourses());
 		}
 	}
 
@@ -86,7 +84,7 @@ function AdminDashboard() {
 				label: "Sales/Month",
 				backgroundColor: "red",
 				data: monthlySalesRecords,
-				borderWidth:2,
+				borderWidth: 2,
 				borderColor: "white",
 			},
 		],
@@ -98,7 +96,7 @@ function AdminDashboard() {
 			await dispatch(getStatData());
 			await dispatch(getPaymentRecords());
 		})();
-	}, []);
+	}, [myCourses]);
 
 	return (
 		<HomeLayout>
@@ -123,7 +121,7 @@ function AdminDashboard() {
 										{allUserCount}
 									</h3>
 								</div>
-                                <FaUsers className="text-yellow-500 text-5xl" />
+								<FaUsers className="text-yellow-500 text-5xl" />
 							</div>
 							<div className="flex items-center justify-between p-5 rounded-md shadow-md gap-5">
 								<div className="flex flex-col items-center">
@@ -134,67 +132,60 @@ function AdminDashboard() {
 										{subscribedCount}
 									</h3>
 								</div>
-                <FaUsers className="text-green-500 text-5xl" />
+								<FaUsers className="text-green-500 text-5xl" />
 							</div>
 						</div>
-
-
 					</div>
 
 					<div className="flex flex-col items-center gap-10 p-5 shadow-lg rounded-md">
 						<div className="h-80 w-full relative ">
-						<Bar className="absolute bottom-0 h-80 w-full" data={salesData} />
+							<Bar
+								className="absolute bottom-0 h-80 w-full"
+								data={salesData}
+							/>
 						</div>
 
 						<div className="grid grid-cols-2 gap-5">
-
 							<div className="flex items-center justify-between p-5 rounded-md shadow-md gap-5">
 								<div className="flex flex-col items-center">
 									<p className="font-semibold">
-										 Subscription Count
+										Subscription Count
 									</p>
 									<h3 className="text-4xl font-bold">
 										{allPayments.count}
 									</h3>
 								</div>
-                                <FcSalesPerformance className="text-yellow-500 text-5xl" />
+								<FcSalesPerformance className="text-yellow-500 text-5xl" />
 							</div>
 							<div className="flex items-center justify-between p-5 rounded-md shadow-md gap-5">
 								<div className="flex flex-col items-center">
 									<p className="font-semibold">
-										 Total Revenue
+										Total Revenue
 									</p>
 									<h3 className="text-4xl font-bold">
-										{allPayments?.count*499}
+										{allPayments?.count * 499}
 									</h3>
 								</div>
-                                <GiMoneyStack className="text-green-500 text-5xl" />
+								<GiMoneyStack className="text-green-500 text-5xl" />
 							</div>
-
 						</div>
 					</div>
 				</div>
 
-
 				<div className="mx-[10%] w-[80%] self-center flex flex-col items-center justify-center gap-10 mb-10">
-
 					<div className="flex w-full items-center justify-between ">
-
 						<h1 className="text-center text-3xl font-semibold">
 							Courses overview
 						</h1>
 
 						<button
-						onClick={(()=>navigate("/course/create"))}
-					    className="w-fit bg-yellow-500 hover:bg-yellow-700 transition-all ease-in-out  duration-300 rounded py-2 px-4 font-semibold text-lg cursor-pointer"
-						>
+							onClick={() => navigate("/course/create")}
+							className="w-fit bg-yellow-500 hover:bg-yellow-700 transition-all ease-in-out  duration-300 rounded py-2 px-4 font-semibold text-lg cursor-pointer">
 							Create New Course
 						</button>
-
 					</div>
 
 					<table className="table overflow-x-scroll ">
-
 						<thead>
 							<tr>
 								<th className="px-6 py-3">S No</th>
@@ -207,52 +198,47 @@ function AdminDashboard() {
 							</tr>
 						</thead>
 						<tbody>
-							{
-								myCourses.map((course, index) => (
-									<tr key={course._id}>
-
-										<td>
-											{index + 1}
-										</td>
-										<td>
-											<textarea readOnly value={course?.title} className="w-40 h-auto bg-transparent resize-none"></textarea>
-										</td>
-										<td>
-											{course?.category}
-										</td>
-										<td>
-											{course?.createdBy}
-										</td>
-										<td>
-											{course?.numberoflectures}
-										</td>
-										<td>
-											<textarea readOnly value={course?.description} className="w-40 h-auto bg-transparent resize-none"></textarea>
-										</td>
-										<td className="flex items-center gap-4">
-											<button
-											onClick={(()=>navigate(`/course/displaylectures`,{state:{...course}}))}
-											className="w-fit bg-green-500 hover:bg-yellow-700 transition-all ease-in-out  duration-300 rounded py-2 px-4 font-semibold text-lg cursor-pointer"
-											>
-												<BsCollectionPlayFill/>
-											</button>
-											<button
-											onClick={()=>onCourseDelete(course?._id)}
-											className="w-fit bg-red-500 hover:bg-yellow-700 transition-all ease-in-out  duration-300 rounded py-2 px-4 font-semibold text-lg cursor-pointer"
-											>
-												<BsTrash/>
-											</button>
-										</td>
-
-									</tr>
-								))
-
-							}
+							{myCourses.map((course, index) => (
+								<tr key={course._id}>
+									<td>{index + 1}</td>
+									<td>
+										<textarea
+											readOnly
+											value={course?.title}
+											className="w-40 h-auto bg-transparent resize-none"></textarea>
+									</td>
+									<td>{course?.category}</td>
+									<td>{course?.createdBy}</td>
+									<td>{course?.numberoflectures}</td>
+									<td>
+										<textarea
+											readOnly
+											value={course?.description}
+											className="w-40 h-auto bg-transparent resize-none"></textarea>
+									</td>
+									<td className="flex items-center gap-4">
+										<button
+											onClick={() =>
+												navigate(
+													`/course/displaylectures`,
+													{ state: { ...course } }
+												)
+											}
+											className="w-fit bg-green-500 hover:bg-yellow-700 transition-all ease-in-out  duration-300 rounded py-2 px-4 font-semibold text-lg cursor-pointer">
+											<BsCollectionPlayFill />
+										</button>
+										<button
+											onClick={() =>
+												onCourseDelete(course?._id)
+											}
+											className="w-fit bg-red-500 hover:bg-yellow-700 transition-all ease-in-out  duration-300 rounded py-2 px-4 font-semibold text-lg cursor-pointer">
+											<BsTrash />
+										</button>
+									</td>
+								</tr>
+							))}
 						</tbody>
-
 					</table>
-
-
 				</div>
 			</div>
 		</HomeLayout>
