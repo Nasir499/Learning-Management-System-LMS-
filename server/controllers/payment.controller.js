@@ -3,7 +3,6 @@ import User from '../models/user.model.js'
 import AppError from '../utils/error.util.js';
 import Payment from '../models/payment.model.js';
 import crypto from 'crypto';
-import { log } from 'console';
 
 
 
@@ -34,6 +33,8 @@ const buySubscribtion = async (req, res, next) => {
         })
         user.subscription.id = subscription.id;
         user.subscription.status = subscription.status;
+        console.log(user);
+        
         await user.save();
         res.status(200).json({
             success: true,
