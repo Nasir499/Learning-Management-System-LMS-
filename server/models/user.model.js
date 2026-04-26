@@ -24,7 +24,7 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: [true, "Password is required"],
-        minLength: [8, "Thoda achcha sa password do,minimu length 8 character"],
+        minLength: [8, "Thoda achcha sa password do,minimum length 8 character"],
         select: false
     },
     avatar: {
