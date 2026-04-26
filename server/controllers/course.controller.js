@@ -8,7 +8,6 @@ import fs from "fs";
 const getAllCourses = async (req, res, next) => {
     try {
         const courses = await Course.find({}).select("-lectures");
-
         res.status(200).json({
             success: true,
             message: "All courses fetched successfully",
@@ -182,7 +181,7 @@ const createLectureToCourseById = async (req, res, next) => {
                 const result = await cloudinary.v2.uploader.upload(req.file.path, {
                     folder: "lectures",
                     chunk_size: 5000000000,
-                    resource_type: "video"
+                    resource_type: "video",
                 });
                 if (result) {
                     lecture.video.public_id = result.public_id;
